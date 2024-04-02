@@ -10,19 +10,7 @@ We will use the [Bored Ape Yacht Club (BAYC)](https://etherscan.io/address/0xBC4
 
 To build the indexing logic we need to first understand where our data will be coming from. Subgraphs are built around listening to events emitted by smart contracts, they can also listen for calls to the contract and new blocks but this is not recommended for performance reasons.
 
-In SendBlocks you can listen for events, calls, contract creation, block creation, and even changes to individual contract storage slots. All without sacrificing performance! 
-
-We will listen for the `Transfer` and `Approve` events emitted by the BAYC contract. This is expressed in SendBlocks by setting an address trigger on the contract with a `log_emitter` location. Your final `functions.yaml` file should, therefore, contain this snippet:
-
-```yaml
-trigger:
-  type: TRIGGER_TYPE_ADDRESS
-  address: "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"
-  locations:
-    - log_emitter
-```
-
-For subgraphs, the event handler is defined as follows in the `subgraph.yaml` file. Note that you have to create a handler for each additional event you want to listen for. This is not the case in SendBlocks, where you can listen for multiple events in a single function. The mapping described is represented in the `subgraph.yaml` file as follows:
+We will listen for the `Transfer` and `Approve` events emitted by the BAYC contract. In the subgraph, this is defined in the `subgraph.yaml` file as follows:
 
 ```yaml
 dataSources:
@@ -32,6 +20,20 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransferApe
 ```
+
+Note that you have to create a handler for each additional event you want to listen for. 
+
+In SendBlocks you can listen for events, calls, contract creation, block creation, and even changes to individual contract storage slots. All without sacrificing performance! To listen for events emitted by the BAYC contract we will include the following trigger definition in the `functions.yaml` file:
+
+```yaml
+trigger:
+  type: TRIGGER_TYPE_ADDRESS
+  address: "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"
+  locations:
+    - log_emitter
+```
+
+This trigger will be matched with the a handler function that we will create shortly.
 
 ## Data Schema
 
@@ -77,16 +79,14 @@ const eventIface = new ethers.utils.Interface([
 We then create the `triggerHandler` function that will be called when the `BToken` contract emits an event. This function will parse the events using the interface we created earlier and call the appropriate handler function. For now we will only handle the `Transfer` and `Approval` events.
 
 ```javascript
-export function triggerHandler(context, data) {
+export async function triggerHandler(context, data) {
     const parsedLog = eventIface.parseLog(data);
 
     switch (parsedLog.name) {
         case "Transfer":
-            handleTransfer(parsedLog);
-            break;
+            return await handleTransfer(parsedLog);
         case "Approval":
-            handleApproval(parsedLog);
-            break;
+            return await handleApproval(parsedLog);
     }
 }
 ```
