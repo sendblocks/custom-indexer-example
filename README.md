@@ -1,6 +1,8 @@
 # SendBlocks Subgraph Workshop
 
-In this repo we will demonstrate how to use the SendBlocks platform to quickly create and deploy advanced indexing logic without the need for a dedicated backend. If you are unfamiliar with the SendBlocks platform, it is recommended to start with the [documentation](https://sendblocks.readme.io/docs/the-basics) before moving on.
+In this repo we will demonstrate how to use the SendBlocks platform to quickly create and deploy advanced indexing logic without the need for a dedicated backend. If you are unfamiliar with the SendBlocks platform, it is recommended to start with the [documentation](https://sendblocks.readme.io/docs/the-basics) before moving on. 
+More so, this guide will use the sb-cli tool to deploy the wanted functionality to the SendBlocks platform. Kindly refer to the [documentation](https://github.com/sendblocks/sendblocks-cli) for more information on how to install and use the sb-cli tool.
+
 
 The deployed function will mirror the functionality of [this](https://github.com/dabit3/bored-ape-yacht-club-api-and-subgraph) subgraph but with added flexibility and ease of use.
 
@@ -26,11 +28,11 @@ Note that you have to create a handler for each additional event you want to lis
 In SendBlocks you can listen for events, calls, contract creation, block creation, and even changes to individual contract storage slots. All without sacrificing performance! To listen for events emitted by the BAYC contract we will include the following trigger definition in the `functions.yaml` file:
 
 ```yaml
-trigger:
-  type: TRIGGER_TYPE_ADDRESS
-  address: "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"
-  locations:
-    - log_emitter
+triggers:
+  - type: TRIGGER_TYPE_ADDRESS
+    address: "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"
+    locations:
+      - log_emitter
 ```
 
 This trigger will be matched with the a handler function that we will create shortly.
