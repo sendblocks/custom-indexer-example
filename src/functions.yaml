@@ -1,6 +1,6 @@
 webhooks:
   - test_webhook:
-      url: https://webhook.site/777b8937-a6b5-4b5f-8252-4e932a0ac640
+      url: https://example.com
       secret: "auth secret"
 
 functions:
@@ -13,5 +13,4 @@ functions:
           address: "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"
           locations:
             - log_emitter
-
       webhook: test_webhook

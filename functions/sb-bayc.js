@@ -1,12 +1,13 @@
 import { ethers } from "https://cdn.skypack.dev/ethers@v5.7.2";
 
+const STORAGE_NAMESPACE = "BAYC-storage";
+
 const eventIface = new ethers.utils.Interface([
     "event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)",
     "event ApprovalForAll(address indexed owner, address indexed operator, bool approved)",
     "event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)",
     "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)",
 ]);
-
 
 export async function triggerHandler(context, data) {
     const parsedLog = eventIface.parseLog(data);
@@ -25,7 +26,7 @@ async function handleTransfer(parsedLog) {
     const tokenKey = `token-${hexTokenId}`;
 
     // Fetch the token object fron KV store
-    let token = await sbcore.storage.Load("BAYC-storage", tokenKey, null);
+    let token = await sbcore.storage.Load(STORAGE_NAMESPACE, tokenKey, null);
     if (token === null) {
         token = {
             owner: to,
@@ -39,7 +40,7 @@ async function handleTransfer(parsedLog) {
         token.approved = null;
     }
 
-    await sbcore.storage.Store("BAYC-storage", tokenKey, token);
+    await sbcore.storage.Store(STORAGE_NAMESPACE, tokenKey, token);
 }
 
 async function handleApproval(parsedLog) {
@@ -48,7 +49,7 @@ async function handleApproval(parsedLog) {
     const tokenKey = `token-${hexTokenId}`;
 
     // Fetch the token object fron KV store
-    let token = await sbcore.storage.Load(tokenKey, null);
+    let token = await sbcore.storage.Load(STORAGE_NAMESPACE, tokenKey, null);
     if (token === null) {
         token = {
             owner: owner,
@@ -60,5 +61,5 @@ async function handleApproval(parsedLog) {
         token.approved = approved;
     }
 
-    await sbcore.storage.Store(tokenKey, token);
+    await sbcore.storage.Store(STORAGE_NAMESPACE, tokenKey, token);
 }
