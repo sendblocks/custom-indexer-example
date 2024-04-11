@@ -1,0 +1,16 @@
+webhooks:
+  - test_webhook:
+      url: https://example.com
+      secret: "auth secret"
+
+functions:
+  - bayc-function:
+      chain_id: CHAIN_ETH_MAINNET
+      code: functions/sb-bayc.js
+      should_send_std_streams: true
+      triggers:
+        - type: TRIGGER_TYPE_ADDRESS
+          address: "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"
+          locations:
+            - log_emitter
+      webhook: test_webhook
