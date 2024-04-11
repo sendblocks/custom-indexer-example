@@ -1,4 +1,4 @@
-# SendBlocks Subgraph Example
+# SendBlocks Custom Indexer Example
 
 In this sample repo we will demonstrate how to use the SendBlocks platform to quickly create and deploy advanced indexing logic without the need for a dedicated backend. If you are unfamiliar with the SendBlocks platform, it is recommended to start with the [documentation](https://sendblocks.readme.io/docs) before moving on.
 
