@@ -8,6 +8,22 @@ The deployed function will mirror the functionality of [this](https://github.com
 
 We will use the [Bored Ape Yacht Club (BAYC)](https://etherscan.io/address/0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D) contract as an example.
 
+## Retrieving contract ABI
+
+To interact with our contract we need to retrieve its ABI. You can find the ABI for the BAYC contract on [Etherscan](https://etherscan.io/address/0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D#code). To use any other contract, simply replace the address in the URL with the address of the contract desired.
+Once you have the ABI, you can save it as a JSON file and use [format_abi.js](./abi/format_abi.js) to convert it into shorter format. This shorter format will be easier to use in your SendBlocks function.
+When using the short ABI in your function code, you can easily choose only the information you're interested in.
+For our example, we will need the `Transfer` and `Approval` events.
+
+```javascript
+const eventIface = new ethers.utils.Interface([
+    "event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)",
+    "event ApprovalForAll(address indexed owner, address indexed operator, bool approved)",
+    "event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)",
+    "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)",
+]);
+```
+
 ## Data Sources
 
 To build the indexing logic, we first need to understand where our data will be coming from. Subgraphs are built around listening to events emitted by smart contracts. They can also listen for calls to the contract, and new blocks, but this is not recommended for performance reasons.
