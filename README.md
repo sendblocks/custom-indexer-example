@@ -11,7 +11,7 @@ We will use the [Bored Ape Yacht Club (BAYC)](https://etherscan.io/address/0xBC4
 ## Retrieving contract ABI
 
 To interact with our contract we need to retrieve its ABI. You can find the ABI for the BAYC contract on [Etherscan](https://etherscan.io/address/0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D#code). To use any other contract, simply replace the address in the URL with the address of the contract desired.
-Once you have the ABI, you can save it as a JSON file and use `format_abi.js` to convert it into shorter format. This shorter format will be easier to use in your SendBlocks function.
+Once you have the ABI, you can save it as a JSON file and use [format_abi.js](./abi/format_abi.js) to convert it into shorter format. This shorter format will be easier to use in your SendBlocks function.
 When using the short ABI in your function code, you can easily choose only the information you're interested in.
 For our example, we will need the `Transfer` and `Approval` events.
 
